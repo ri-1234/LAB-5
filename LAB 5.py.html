@@ -1,0 +1,166 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # LAB 5
+# ### Car Crashes 
+# #### By: DEL
+
+# ## Abstract
+
+# Welome to my fifth lab! In this lab I will be exploring data visualizations and what they add to my lab. I will be looking at a Car Crash data set. This dataset includes interesting data, such as total amount of car accidents, if the person was speeding or drinking when they got into that car accident, if they were distracted, if they have every gotten into a accident before and a few other interesting points.
+# 
+# Questions I am looking to answer: 
+# * What causes the most car crashes?
+# * How many people drink alcohol while driving?
+# * Do people who get in car crashes get in them again?
+# * How many are speeding when they get into car accidents?
+# * What state has the most car accidents?
+# * What state has the least car accidents?
+# 
+
+# ## Data Exploration
+
+# This dataset comes from seaborn on github (https://github.com/mwaskom/seaborn-data/blob/master/car_crashes.csv). This dataset is a small one but the information I can pull from it is pretty significant. This dataset has 8 columns that include what I included above in the abstract. This dataset is from March 28th, 2015. I will be looking at which states have the most car accidents, what is happening with someone when they get into a car accident for example: are they drinking? are they distracted? I will also be looking at if people who have gotten into a car accident before are more likely to get into a car accident again. 
+
+# In[118]:
+
+
+import math as m
+import numpy as np
+import scipy as sp
+import pandas as pd
+import matplotlib as plt
+import matplotlib.pyplot as plt
+import seaborn as sns  #IMPORTANT - UPGRADE SEABORN TO VERSION 0.9.0 IN ANACONDA ENV
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+
+# I want to make the name of this dataset simple and easy to remember so I am going to call it "cc".
+
+# In[119]:
+
+
+cc.describe()
+
+
+# In[120]:
+
+
+sns.set(style='whitegrid')
+cc = sns.load_dataset('car_crashes')
+ax = sns.boxplot(x=cc['total'])
+
+
+# The box plot shows the quartile ranges and where the middle number of amount of car accidents.
+# 
+# From here I can tell: 
+# 
+# * that the average number of car accidents is around 15.5. 
+# * that the minimum amount of car accidents is around 6.
+# * the maximum number of car accidents is around 23. 
+# 
+# This graph just furthers concludes what describe() told me above. This is further evidence for those numbers.
+# 
+
+# In[121]:
+
+
+cc = sns.load_dataset("car_crashes")
+
+
+# I want to know the names of the columns so I will get them to open down below.
+
+# In[122]:
+
+
+cc.columns 
+
+
+# * Index tells me the data index of the variable. 
+# * In this case we confirm that cc.index is actually the range starting from the 0.
+
+# In[123]:
+
+
+cc.index
+
+
+# ## Data Modeling
+
+# In[124]:
+
+
+cc.info()
+
+
+# In[125]:
+
+
+cc.head()
+
+
+# The first thing I am going to do is group by state because I am interested in knowing the breakdown of each column by state. I won't yet analyze what is going on in each state yet, I just want to get an idea of what I am looking at and figure out which graphs to use based on the data.
+
+# In[126]:
+
+
+# applying group() funtions to 
+# group the data on team value 
+gk = cc.groupby ('abbrev')
+
+type (gk)
+
+# Let's print the first entries 
+# In all the groups formed 
+gk.first ()
+
+
+# Now, I am going to group by "speeding" to figure out which state had the most car crashes by speeding.
+
+# In[127]:
+
+
+# applying group() funtions to 
+# group the data on speeding value 
+gk = cc.groupby ('speeding')
+
+type (gk)
+
+# Let's print the first entries 
+# In all the groups formed 
+gk.first ()
+
+
+# This is really interesting to me because since the dataset is so small, I am able to find which state had the most speeding accidents, based on this - I can see that it was Hawaii. Hawaii had about 9 speeding accidents that were recorded. I can tell that the state with the least amount of accidents because of speeding is New Jersey. 
+
+# I am now going to use speeding data and total number of car accidents in a scatter plot. I am going to switch it up a little and use both speeding and alcohol to show how much of total car accidents are caused by each of those factors. 
+
+# In[128]:
+
+
+cc = sns.load_dataset("car_crashes") 
+sns.relplot (x="alcohol", y= "speeding", hue = "total", data = cc, kind = "scatter") 
+
+
+# This graph is very clear and shows how much of car accidents are speeding related. It is clear and shows me the numbers on speeding and alcohol and which leads to more accidents. 
+
+# # Data Analysis and Conclusions
+
+# For my fine graph, I am going to make a graph for only the speeding part of the data, I think I will use a barplot to see more data then I would be able to in a different graph!
+
+# In[129]:
+
+
+sns.set(style="whitegrid")
+cc = sns.load_dataset("car_crashes")
+ax = sns.barplot(x="total", y= "speeding", data=cc) 
+
+
+# This graph has a lot of colors and looks really nice. It shows the state and how many car accidents were caused by speeding. It is very hard to change the abbrev but it is based by state and how many car accidents are caused by speeding. 
+
+# From the data I found and the graphs I made I was able to conclude a lot of things. Such as the state with the highest number of accidents related to speeding: Hawaii. I also found the state with the least number of accidents related to speeding: New Jersey. I was also surprised to find based on the scatter plot that speeding accidents are less common than any type of accident. 
+
+# # Aknowledgements 
+
+# Shoutout the class for making awesome and helpful graphs. Shoutout Ms. Sconyers for answering questions about my dataset and helping me figure out code. Shoutout June specifically for helping me figure out why my graphs kept getting errors. And finally shoutout to myself for not giving up on this lab even when it got super difficult and I felt like I wasn't going to finish it. 
